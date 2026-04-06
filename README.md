@@ -35,3 +35,4 @@ For accurate inline comment highlighting, use the Sublime Text configuration inc
 ### Sublime Text — Comment Highlighting
 LDL+ supports inline comments denoted by a colon (:), which comments out only the word or phrase directly following the colon rather than the remainder of the line. Due to constraints in the Sublime Syntax system, comment highlighting in Sublime Text will highlight everything following a colon to the end of the line unless the colon is followed by an "=" equals sign. This is due to LDL+ assignment operation being represented by ":=". This is a limitation of the format and not a bug in the configuration itself.
 For accurate inline comment highlighting, use the Agile Business Suite (**ABS**) IDE.
+~
