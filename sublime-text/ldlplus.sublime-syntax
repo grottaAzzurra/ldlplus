@@ -1,0 +1,107 @@
+%YAML 1.2
+---
+# https://www.sublimetext.com/docs/3/syntax.html
+name: LDL+
+file_extensions:
+  - ldlp
+scope: source.ldlp
+
+contexts:
+  # The prototype context is prepended to all contexts but those setting
+  # meta_include_prototype: false.
+  prototype:
+    - include: comments
+
+  main:
+    # The main context is the initial starting point of our syntax.
+    # Include other contexts from here (or specify them directly).
+    - include: keywords
+    - include: conditions
+    - include: operators
+    - include: numbers
+    - include: strings
+
+  keywords:
+      # conditionals
+    - match: '(?i)(?<![\.])\b(determine|dt|if|dowhen|dw|loop|foreach|begincase|bc|lookup)\b'
+      scope: keyword.control.ldlp
+      #
+    - match: '(?i)(?<![\.])\b(else|case|cs|otherwise|ow)\b'
+      scope: keyword.control.ldlp
+      #
+    - match: '(?i)(?<![\.])\b(end|endexit|ee|endcase|ec)\b'
+      scope: keyword.control.ldlp
+      # other
+    - match: '(?i)(?<![\.])\b(abort|accept|ax|accessext|aext|add|ad|adhoc|advance|adv|always|attach|att|attribute|attachandspace|ats|attribute|attr|begincase|bc|loop|bg|beginpage|bp|break|bk|case|cs|compute|comp|continue|criticalpoint|cp|cursor|cu|dateconvert|dc|detach|det|dth|determine|dt|divide|dv|presentvalueflow|annualrateofflow|futurevalueflow|flowforfuturevalue|compound|discount|mortgage|presentvaluetoannuity|annuityfuturevalue|if|dowhen|dw|else|end|endcase|ec|endexit|ee|endnoprint|enp|enduse|eu|exclusive|exu|extract|ex|flag|fl|fg|fla|foreach|initialize|init|insert|ins|jumpto|jto|goto|label|lab|load|log|lookup|lu|"lookup every"|"lookup from"|"lookup group"|loop|match|message|me|move|mv|movedate|md|movetime|mt|multiply|mu|onchange|och|otherwise|ow|page|pa|purge|pu|recall|rc|release|rel|restart|rt|roc|run|sendmessage|sendstatus|smsg|sm|ss|sendprint|send|sp|sendlistdynamic|sldyn|sendliststatic|slsta|setdeb|settitle|sett|sleep|slp|start|st|stninfo|si|subtract|sb|switchto|swt|wake|wu|this|super|owner|component)\b'
+      scope: keyword.other.ldlp
+      #
+    - match: '(?i)(?<![\.])\b(gs|dc-|daynum|ddmmccyy|yy-mmm-dd|uk-alpha|mm-dd-yy|ccyy-mmm-dd|us-alpha|mm-dd-ccyy|yyddd|in-alpha|mmddyy|ccyyddd|dd-mm-yy|mmddccyy|yymmdd|dd-mm-ccyy|mmm-dd-yy|ccyymmdd|dd-mmm-yy|mmm-dd-ccyy|yymmmdd|dd-mmm-ccyy|mmmddyy|ccyymmmdd|ddmmmyy|mmmddccyy|today|ddmmmccyy|yy-mm-dd|weekno|hhmmsshh)\b'
+      scope: keyword.other.ldlp
+      #
+    - match: '(?i)(?<![\.])\b(glb\.[a-z]*)\b'
+      scope: keyword.other.ldlp
+
+  operators:
+    - match: '(?i)\b(\+|-|\*\*|\*|\/|&|&\+)\b(?>![a-z])'
+      scope: keyword.operator.arithmetic.ldlp
+    - match: '(<|>|\=|~|&&|\|\|)'
+      scope: keyword.operator.logical.ldlp
+    - match: '(:=)'
+      scope: keyword.operator.assignment.ldlp
+    - match: '(?i) (?<![\.])\b(not|\~|and|&&|or|\|\||in|isa|giving|format|fmt|position|pos|length|le|odt|as|\\|numeric|actual|back|every|from|until|group|last|total|extractedas|eas|exist) '
+      scope: keyword.operator.word.ldlp
+
+  numbers:
+    - match: '\b\d+\b'
+      scope: constant.numeric.ldlp
+    - match: '\b\d+\.\d+\b'
+      scope: constant.numeric.ldlp
+    - match: '\s-\d+'
+      scope: constant.numeric.ldlp
+
+  conditions:
+    # conditions begin and end with parentheses, and use backslashes as an escape
+    # character.
+    - match: '\('
+      scope: punctuation.section.parens.begin.ldlp
+      push: inside_condition
+
+  inside_condition:
+    # - meta_include_prototype: false
+    - include: strings
+    - include: operators
+    - include: numbers
+    - include: keywords
+    - include: conditions
+    - meta_scope: meta.parens.ldlp
+    - match: '\\'
+      scope: constant.character.escape.ldlp
+    - match: '\\[^:]'
+      scope: constant.character.escape.ldlp
+    - match: '\)'
+      scope: punctuation.section.parens.end.ldlp
+      pop: true
+
+  strings:
+    # Strings begin and end with double quote, and use backslashes as an escape
+    # character.
+    - match: '"'
+      scope: punctuation.definition.string.begin.ldlp
+      push: inside_string
+
+  inside_string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.ldlp
+    - match: '\\'
+      scope: constant.character.escape.ldlp
+    - match: '\\[^:]'
+      scope: constant.character.escape.ldlp
+    - match: '"'
+      scope: punctuation.definition.string.end.ldlp
+      pop: true
+
+  comments:
+    # Comments begin with a ':' and finish at the end of the line.
+    - match: ':[^=].*$'
+      scope: comment.line.ldlp
+ #
