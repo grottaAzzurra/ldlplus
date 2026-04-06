@@ -12,7 +12,7 @@ LDL+ is the evolution of LDL, introduced with Unisys Agile Business Suite (AB Su
 
 ## Installation
 ### Sublime Text
-1. Clone the ldl+/sublime-text repo to your local machine. Take note of where you cloned it to or the location you downloaded it to.
+1. Clone the ldlplus/sublime-text repo to your local machine. Take note of where you cloned it to or the location you downloaded it to.
 2. Open Sublime Text.
 3. Navigate to Preferences -> Browse Packages
 4. This will open a new file explorer window. Use it to create a new folder called "ldlplus" in this directory. This will contain all the configurations for the LDL+ syntax.
