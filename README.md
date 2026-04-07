@@ -1,7 +1,9 @@
 # LDL+
 
-Syntax highlighting configuration for Logic Development Language + (**LDL+**), a proprietary language developed by Unisys.
-LDL+ is the evolution of LDL, introduced with Unisys Agile Business Suite (AB Suite aka ABS). It extends LDL with object-oriented features and runs within a Microsoft Visual Studio-based IDE. AB Suite targets Unisys ClearPath systems as well as Java and .NET platforms. Keywords were sourced directly from the official Unisys language documentation.
+Syntax highlighting configuration for Logic Development Language + (**LDL+**), a proprietary language developed by Unisys Corporation.
+LDL+ is the evolution of LDL, introduced with Unisys's Agile Business Suite (AB Suite aka ABS). It extends LDL with object-oriented features and runs within a Microsoft Visual Studio-based IDE. AB Suite targets Unisys ClearPath systems as well as Java and .NET platforms. Keywords were sourced directly from the official Unisys's language documentation.
+
+[Unisys Corporation](https://www.unisys.com/)
 
 ## Supported Editors:
 - Sublime Text (.sublime-syntax)
