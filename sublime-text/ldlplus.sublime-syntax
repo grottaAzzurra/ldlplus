@@ -15,11 +15,29 @@ contexts:
   main:
     # The main context is the initial starting point of our syntax.
     # Include other contexts from here (or specify them directly).
-    - include: keywords
+    - include: strings
     - include: conditions
     - include: operators
     - include: numbers
-    - include: strings
+    - include: keywords
+
+  operators:
+    - match: '(?i)\b(\+|-|\*\*|\*|\/|&|&\+)\b(?>![a-z])'
+      scope: keyword.operator.arithmetic.ldlp
+    - match: '(<|>|\=|~|&&|\|\|)'
+      scope: keyword.operator.logical.ldlp
+    - match: '(:=)'
+      scope: keyword.operator.assignment.ldlp
+    - match: '(?i) (?<![\.])\b(not|\~|and|&&|or|\|\||in|isa|giving|format|fmt|position|pos|length|le|odt|as|\\|numeric|actual|back|every|from|until|group|last|total|extractedas|eas|exist) '
+      scope: keyword.operator.word.ldlp
+
+  numbers:
+    - match: '\b\d+\b'
+      scope: constant.numeric.ldlp
+    - match: '\b\d+\.\d+\b'
+      scope: constant.numeric.ldlp
+    - match: '\s-\d+'
+      scope: constant.numeric.ldlp
 
   keywords:
       # conditionals
@@ -40,24 +58,6 @@ contexts:
       #
     - match: '(?i)(?<![\.])\b(glb\.[a-z]*)\b'
       scope: keyword.other.ldlp
-
-  operators:
-    - match: '(?i)\b(\+|-|\*\*|\*|\/|&|&\+)\b(?>![a-z])'
-      scope: keyword.operator.arithmetic.ldlp
-    - match: '(<|>|\=|~|&&|\|\|)'
-      scope: keyword.operator.logical.ldlp
-    - match: '(:=)'
-      scope: keyword.operator.assignment.ldlp
-    - match: '(?i) (?<![\.])\b(not|\~|and|&&|or|\|\||in|isa|giving|format|fmt|position|pos|length|le|odt|as|\\|numeric|actual|back|every|from|until|group|last|total|extractedas|eas|exist) '
-      scope: keyword.operator.word.ldlp
-
-  numbers:
-    - match: '\b\d+\b'
-      scope: constant.numeric.ldlp
-    - match: '\b\d+\.\d+\b'
-      scope: constant.numeric.ldlp
-    - match: '\s-\d+'
-      scope: constant.numeric.ldlp
 
   conditions:
     # conditions begin and end with parentheses, and use backslashes as an escape
