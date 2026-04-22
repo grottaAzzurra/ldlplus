@@ -17,26 +17,31 @@ contexts:
     # Include other contexts from here (or specify them directly).
     - include: strings
     - include: conditions
-    - include: operators
+    - include: non-arithmetic-operators
     - include: numbers
     - include: keywords
 
-  operators:
-    - match: '(?i)\b(\+|-|\*\*|\*|\/|&|&\+)\b(?>![a-z])'
-      scope: keyword.operator.arithmetic.ldlp
+  non-arithmetic-operators:
+    # Logical operators can appear anywhere in uncommented code
     - match: '(<|>|\=|~|&&|\|\|)'
       scope: keyword.operator.logical.ldlp
+    # Assignment operator can appear anywhere in uncommented code
     - match: '(:=)'
       scope: keyword.operator.assignment.ldlp
-    - match: '(?i) (?<![\.])\b(not|\~|and|&&|or|\|\||in|isa|giving|format|fmt|position|pos|length|le|odt|as|\\|numeric|actual|back|every|from|until|group|last|total|extractedas|eas|exist) '
+    # Word operators can appear anywhere in uncommented code
+    - match: '(?i) (?<![\.])\b(not|\~|and|or|in|isa|giving|format|fmt|position|pos|length|le|odt|as|\\|numeric|actual|back|every|from|until|group|last|total|extractedas|eas|exist) '
       scope: keyword.operator.word.ldlp
 
+  arithmetic-operators:
+    # Arithmetic operators only appear inside statements that are preceded by the compute or comp keywords
+    - match: '(?i)\b(\+|-|\*\*|\*|\/|&|&\+)\b(?>![a-z])'
+      scope: keyword.operator.arithmetic.ldlp
+
   numbers:
-    - match: '\b\d+\b'
+    # Numbers can appear as negatives and/or decimals.
+    - match: '(?<=[\s(+\-*\/])-?[0-9]*\.[0-9]+\b'
       scope: constant.numeric.ldlp
-    - match: '\b\d+\.\d+\b'
-      scope: constant.numeric.ldlp
-    - match: '\s-\d+'
+    - match: '(?<=[\s(+\-*\/])-?[0-9]+\b'
       scope: constant.numeric.ldlp
 
   keywords:
@@ -60,28 +65,50 @@ contexts:
       scope: keyword.other.ldlp
 
   conditions:
-    # conditions begin and end with parentheses, and use backslashes as an escape
-    # character.
+    # Conditions begin and end with parentheses. They can be nested inside
+    # other conditions and inside compute statements but not inside strings.
+    # They can be preceded by keywords or other operators but not by arithmetic operators.
+    - match: '(?i)(compute|comp)\s+'
+      captures:
+        1: keyword.other.ldlp
+      push: expect_compute
     - match: '\('
       scope: punctuation.section.parens.begin.ldlp
       push: inside_condition
 
-  inside_condition:
-    # - meta_include_prototype: false
-    - include: strings
-    - include: operators
-    - include: numbers
-    - include: keywords
-    - include: conditions
+  expect_compute:
+    # For use with compute; and comp; keywords to ensure that the parentheses that
+    # follow them are highlighted as part of the compute statement and not as part of a condition.
+    - match: '\('
+      scope: punctuation.section.parens.begin.ldlp
+      set: inside_compute
+    - match: '$'
+      pop: true
+
+  inside_compute:
+    # Within a computation, only arithmetic operators, numbers, keywords, and nested parentheses are valid.
     - meta_scope: meta.parens.ldlp
-    - match: '\\'
-      scope: constant.character.escape.ldlp
-    - match: '\\[^:]'
-      scope: constant.character.escape.ldlp
+    - include: arithmetic-operators
+    - include: keywords
+    - include: numbers
+    - match: '\('
+      scope: punctuation.section.parens.begin.ldlp
+      push: inside_compute
     - match: '\)'
       scope: punctuation.section.parens.end.ldlp
       pop: true
 
+  inside_condition:
+    # Within a condition, only non-arithmetic operators, numbers, keywords, and nested parentheses are valid.
+    - include: non-arithmetic-operators
+    - include: numbers
+    - include: keywords
+    - include: conditions
+    - meta_scope: meta.parens.ldlp
+    - match: '\)'
+      scope: punctuation.section.parens.end.ldlp
+      pop: true
+      
   strings:
     # Strings begin and end with double quote, and use backslashes as an escape
     # character.
