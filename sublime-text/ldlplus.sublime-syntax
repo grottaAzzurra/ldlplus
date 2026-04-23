@@ -19,6 +19,7 @@ contexts:
     - include: conditions
     - include: non-arithmetic-operators
     - include: numbers
+    - include: separators
     - include: keywords
 
   non-arithmetic-operators:
@@ -27,20 +28,22 @@ contexts:
       scope: keyword.operator.assignment.ldlp
     # Concatenation operators can appear anywhere in uncommented code
     - match: '(&\+|&)'
-      scope: keyword.operator.logical.ldlp
+      scope: keyword.operator.ldlp
     # Logical operators can appear anywhere in uncommented code
-    - match: '(not|\~|and|&&|or|\|\|)'
+    - match: '\b(not|and|or)\b'
+      scope: keyword.operator.logical.ldlp #Change scope to keyword.word.ldlp if desired.
+    - match: '(\~|&&|\|\|)'
       scope: keyword.operator.logical.ldlp
     # Relational operators can appear anywhere in uncommented code
     - match: '(<\=|<|>\=|>|\=|<>|\sin\s|\sisA\s)'
-      scope: keyword.operator.logical.ldlp
+      scope: keyword.operator.ldlp
     # Word operators can appear anywhere in uncommented code
-    - match: '(?i)\b(actual|as|back|eas|every|exist|extractedas|fmt|format|from|giving|group|last|length|le|numeric|odt|position|pos|total|until)\b'
+    - match: '(?i)\b(actual|as|back|delimiter|delim|eas|editonly|every|exist|extractedas|eas|retainedas|ras|fmt|format|from|giving|group|last|length|le|numeric|odt|position|pos|remainder|rem|rounded|rou|sorta|sortd|start|st|total|until|todaynumber|todate|toalpha|norelease|endofpage|serial|secure|keyonly|multi)\b'
       scope: keyword.operator.word.ldlp
 
   arithmetic-operators:
-    # Arithmetic operators only appear inside statements that are preceded by the compute or comp keywords
-    - match: '(?i)\b(\+|-|\*\*|\*|\/|&|&\+)\b(?>![a-z])'
+    # Arithmetic operators only appear inside statements that are preceded by the compute, comp, dateconvert, or dc keywords
+    - match: '(?i)(?<=[\w])\s*(\+|-|\*\*|\*|\/)\s*(?=[\w])'
       scope: keyword.operator.arithmetic.ldlp
 
   numbers:
@@ -49,26 +52,51 @@ contexts:
       scope: constant.numeric.ldlp
     - match: '(?<=[\s(+\-*\/])-?[0-9]+\b'
       scope: constant.numeric.ldlp
+    # Booleans
+    - match: '(?i)\b(true|false)\b'
+      scope: constant.other.ldlp
+    # Buffers generally appear in extraction statements
+    - match: '\s[A-z]\s'
+      scope: constant.other.ldlp
+
+  separators:
+    # Line continuation is a slash at the end of a line
+    - match: '\\$'
+      scope: punctuation.separator.continuation.ldlp
 
   keywords:
-      # conditionals
-    - match: '(?i)(?<![\.])\b(determine|dt|if|dowhen|dw|loop|foreach|begincase|bc|lookup)\b'
+    # Control
+      # In the ABS editor, control flow syntax is not differentiated stylistically
+      # based on whether a keyword is a conditional or not. For this reason, the
+      # control scope is applied across the board to Control and Conditional keywords.
+    - match: '(?i)(?<![\.])\b(attention|error|accept|ax|advance|av|beginpage|bp|cursor|cu|continue|determine|dt|extract|ex|fg|flag|fla|fl|goto|insert|ins|lookup every|lookup from|lookup group|lookup|lu|message|me|och|onchange|page|pa|purge|pu|recall|rc|release|rel|restart|run|sendlistdynamic|sldyn|sendliststatic|slsta|sendmessage|smsg|sm|sendprint|sp|sendstatus|ss|send|settitle|sett|sleep|slp|switchto|swt|wake|wu)\b'
       scope: keyword.control.ldlp
-      #
-    - match: '(?i)(?<![\.])\b(else|case|cs|otherwise|ow)\b'
+    - match: '(?i)(?<![\.])\b(endnoprint|enp|enduse|eu)\b'
       scope: keyword.control.ldlp
-      #
-    - match: '(?i)(?<![\.])\b(end|endexit|ee|endcase|ec)\b'
-      scope: keyword.control.ldlp
-      # other
-    - match: '(?i)(?<![\.])\b(abort|accept|ax|accessext|aext|add|ad|adhoc|advance|adv|always|attach|att|attribute|attachandspace|ats|attribute|attr|begincase|bc|loop|bg|beginpage|bp|break|bk|case|cs|compute|comp|continue|criticalpoint|cp|cursor|cu|dateconvert|dc|detach|det|dth|determine|dt|divide|dv|presentvalueflow|annualrateofflow|futurevalueflow|flowforfuturevalue|compound|discount|mortgage|presentvaluetoannuity|annuityfuturevalue|if|dowhen|dw|else|end|endcase|ec|endexit|ee|endnoprint|enp|enduse|eu|exclusive|exu|extract|ex|flag|fl|fg|fla|foreach|initialize|init|insert|ins|jumpto|jto|goto|label|lab|load|log|lookup|lu|"lookup every"|"lookup from"|"lookup group"|loop|match|message|me|move|mv|movedate|md|movetime|mt|multiply|mu|onchange|och|otherwise|ow|page|pa|purge|pu|recall|rc|release|rel|restart|rt|roc|run|sendmessage|sendstatus|smsg|sm|ss|sendprint|send|sp|sendlistdynamic|sldyn|sendliststatic|slsta|setdeb|settitle|sett|sleep|slp|start|st|stninfo|si|subtract|sb|switchto|swt|wake|wu|this|super|owner|component)\b'
+    # Conditional
+    - match: '(?i)(?<![\.])\b(abort|begincase|bc|break all|break|bk|case|cs|dowhen|dw|else|endcase|ec|endexit|ee|end|foreach|if|jto|jumpto|label|lab|loop while|loop|otherwise|ow|while)\b'
+      scope: keyword.control.ldlp # Change scope to keyword.conditional.ldlp if desired.
+    # Qualifiers
+    - match: '(?i)(?<![\.])\b(component|owner|super|this)\b'
       scope: keyword.other.ldlp
-      #
-    - match: '(?i)(?<![\.])\b(gs|dc-|daynum|ddmmccyy|yy-mmm-dd|uk-alpha|mm-dd-yy|ccyy-mmm-dd|us-alpha|mm-dd-ccyy|yyddd|in-alpha|mmddyy|ccyyddd|dd-mm-yy|mmddccyy|yymmdd|dd-mm-ccyy|mmm-dd-yy|ccyymmdd|dd-mmm-yy|mmm-dd-ccyy|yymmmdd|dd-mmm-ccyy|mmmddyy|ccyymmmdd|ddmmmyy|mmmddccyy|today|ddmmmccyy|yy-mm-dd|weekno|hhmmsshh)\b'
+    # Other
+    - match: '(?i)(?<![\.])\b(ats|attachandspace|attach|att|dateconvert|dc|detach|det|dth|movedate|md|movetime|mt|move|mv|si|stninfo)\b'
       scope: keyword.other.ldlp
-      #
-    - match: '(?i)(?<![\.])\b(glb\.[a-z]*)\b'
+    - match: '(?i)(?<![\.])\b(ad|add|compute|comp|divide|dv|initialize|init|multiply|mu|subtract|sb)\b'
       scope: keyword.other.ldlp
+    - match: '(?i)(?<![\.])\b(accessext|aext|adhoc|always|annualrateofflow|annuityfuturevalue|attribute|attr|ax|bg|compound|cp|criticalpoint|discount|dth|exclusive|exu|flowforfuturevalue|futurevalueflow|load|log|match|mortgage|presentvalueflow|presentvaluetoannuity|roc|rt|etdeb|)\b'
+      scope: keyword.other.ldlp
+    # Date Time Format Keywords
+    - match: '(?i)(?<![\.])\b(daynum|uk-alpha|us-alpha|in-alpha|dd-mm-yy|dd-mm-ccyy|dd-mmm-yy|dd-mmm-ccyy|ddmmmyy|ddmmmccyy|ddmmyy|ddmmccyy|mm-dd-yy|mm-dd-ccyy|mmddyy|mmddccyy|mmm-dd-yy|mmm-dd-ccyy|mmmddyy|mmmddccyy|yy-mm-dd|ccyy-mm-dd|yy-mmm-dd|ccyy-mmm-dd|yyddd|ccyyddd|yymmdd|ccyymmdd|yymmmdd|ccyymmmdd|today|weekno|gs)\b'
+      scope: keyword.other.ldlp
+    # System Data Items
+    - match: '(?i)(\s|\b)(actmth|backup|device|exists|formdepth|formid|glb.2pc|glb\.actionkey|glb\.add|glb\.altuser|glb\.appname|glb\.appno|glb\.ascprthost|glb\.ascprt|glb\.backup|glb\.balance|\.exists|\.istemporary|\.name|\.permanent|\.record|glb.|glb\.add|glb\.altuser|glb\.ascprthost|glb\.backup|glb\.base|glb\.ccs|glb\.century|glb\.century_start|glb\.change|glb\.change|glb\.chargecode|glb\.chg|glb\.close|glb\.copy|glb\.corstatus|glb\.date|glb\.dbg_db|glb\.dbg_lg|glb\.dbg_lg|glb\.dbg_oltp|glb\.dc_cc|glb\.dc_ccyy_mm_dd|glb\.dc_ccyy_mmm_dd|glb\.dc_ccyyddd|glb\.dc_ccyymmdd|glb\.dc_ccyymmmdd|glb\.dc_daynum|glb\.dc_dd_mm_ccyy|glb\.dc_dd_mm_yy|glb\.dc_dd_mmm_ccyy|glb\.dc_dd_mmm_yy|glb\.dc_ddmmccyy|glb\.dc_ddmmmccyy|glb\.dc_ddmmmyy|glb\.dc_ddmmyy|glb\.dc_in_alpha|glb\.dc_mm_dd_ccyy|glb\.dc_mm_dd_yy|glb\.dc_mmddccyy|glb\.dc_mmddyy|glb\.dc_mmm_dd_ccyy|glb\.dc_mmm_dd_yy|glb\.dc_mmmddccyy|glb\.dc_mmmddyy|glb\.dc_today|glb\.dc_uk_alpha|glb\.dc_us_alpha|glb\.dc_weekno|glb\.dc_yy_mm_dd|glb\.dc_yy_mmm_dd|glb\.dc_yyddd|glb\.dc_yymmdd|glb\.dc_yymmmdd|glb\.deadlock|glb\.del|glb\.del|glb\.destenv|glb\.desthost|glb\.destination|glb\.destnoform|glb\.destxnid|glb\.device|glb\.dlrecover|glb\.dlretry|glb\.dlretry|glb\.error|glb\.examkey|glb\.examkey|glb\.exname|glb\.extext|glb\.fail|glb\.fileinfo|glb\.fileinfo|glb\.formdepth|glb\.formid|glb\.fulllength|glb\.fulllength|glb\.fullstn|glb\.gui|glb\.high|glb\.htimeout|glb\.hubstatus|glb\.hubtimeout|glb\.initfullstn|glb\.initstn|glb\.initstn|glb\.inputdata|glb\.inq|glb\.language|glb\.length|glb\.linecount|glb\.lineup|glb\.lineupname|glb\.lineupname|glb\.low|glb\.machine|glb\.mainsqlmessage|glb\.match|glb\.max|glb\.maxcopy|glb\.min|glb\.mixno|glb\.numcopies|glb\.numcopies|glb\.oltpservice|glb\.oltpsubtype|glb\.oltptype|glb\.oltpvalue|glb\.oltpvalue|glb\.origin|glb\.originenv|glb\.originhost|glb\.originispec|glb\.originptn|glb\.originxnid|glb\.pagecount|glb\.param|glb\.paramflag|glb\.per|glb\.pitch|glb\.postsqlmessage|glb\.presqlmessage|glb\.previspec|glb\.printat|glb\.printbanner|glb\.printbanner|glb\.printhost|glb\.priority|glb\.priority|glb\.priv|glb\.product|glb\.prtparam|glb\.pur|glb\.query|glb\.recover|glb\.repgendate|glb\.repgentime|glb\.replang|glb\.repname|glb\.repunique|glb\.repunique|glb\.repversion|glb\.request|glb\.request|glb\.rocflag|glb\.savedays|glb\.savedays|glb\.secondary|glb\.secondary|glb\.self|glb\.selfdb|glb\.selfenv|glb\.selfhost|glb\.selfxnid|glb\.shadow|glb\.shadow|glb\.source|glb\.spaces|glb\.stalang|glb\.station|glb\.status|glb\.status|glb\.stn|glb\.stnhost|glb\.style|glb\.subsys|glb\.subsys|glb\.sysgendate|glb\.sysgentime|glb\.sysversion|glb\.task|glb\.task|glb\.time|glb\.time|glb\.title|glb\.title|glb\.today|glb\.today|glb\.todays_date_num|glb\.todays_date_num|glb\.todays_day|glb\.todays_day|glb\.todays_month|glb\.todays_month|glb\.todays_month_num|glb\.todays_month_num|glb\.todays_year|glb\.todays_year|glb\.total|glb\.tpgroup|glb\.tpgroup|glb\.transtate|glb\.transtate|glb\.twopc|glb\.unique|glb\.unique|glb\.user|glb\.user|glb\.usercode|glb\.versionid|glb\.work|glb\.work|glb\.yymmdd|glb\.zeros|input_date|ispec|istemporary|linecount|lineup|lineupname|maint|name|numcopies|pagecount|pitch|printat|printbanner|printhost|record|savedays|source|station|title|tranno|user)(\s|\b)'
+      captures:
+        2: keyword.other.ldlp
+    # Methods
+    - match: '(add|advance|advancechannel|advancenewpage|annualrateofflow|annuityfuturevalue|atend|beginpage|bp|beginpageclear|clear|close|first|last|next|prior|closeupdate|compound|contra|count|create|delete|isempty|closedown|construct|destruct|edit|main|prepare|startup|discount|edit|evaluate|external|flowforfuturevalue|futurevalueflow|futurevaluefromannuity|getlength|getpath|initialize|key|leftalign|load|mortgage|open|position|presentvalueflow|presentvaluetoannuity|purge|read|release|restart|sendprint|send|setmaint|setpath|settoclearwhen|sort|startup|store|tolower|total|toupper|update|write|print|clearpersistent|getmessage|glb\.list|glb\.clientmanager|senddynamic|sendstatic|)\('
+      captures:
+        1: keyword.control.ldlp
 
   conditions:
     # Conditions begin and end with parentheses. They can be nested inside
@@ -77,30 +105,19 @@ contexts:
     - match: '(?i)(compute|comp)\s+'
       captures:
         1: keyword.other.ldlp
-      push: expect_compute
+      push: inside_compute
     - match: '\('
       scope: punctuation.section.parens.begin.ldlp
       push: inside_condition
 
-  expect_compute:
-    # For use with compute; and comp; keywords to ensure that the parentheses that
-    # follow them are highlighted as part of the compute statement and not as part of a condition.
-    - match: '\('
-      scope: punctuation.section.parens.begin.ldlp
-      set: inside_compute
-    - match: '$'
-      pop: true
-
   inside_compute:
-    # Within a computation, only arithmetic operators, numbers, keywords, and nested parentheses are valid.
+    # Within a computation, only arithmetic and non-arithmetic operators, numbers, keywords, and nested parentheses are valid.
     - meta_scope: meta.parens.ldlp
+    - include: non-arithmetic-operators
     - include: arithmetic-operators
     - include: keywords
     - include: numbers
-    - match: '\('
-      scope: punctuation.section.parens.begin.ldlp
-      push: inside_compute
-    - match: '\)'
+    - match: '$'
       scope: punctuation.section.parens.end.ldlp
       pop: true
 
@@ -114,7 +131,7 @@ contexts:
     - match: '\)'
       scope: punctuation.section.parens.end.ldlp
       pop: true
-      
+
   strings:
     # Strings begin and end with double quote, and use backslashes as an escape
     # character.
@@ -125,9 +142,7 @@ contexts:
   inside_string:
     - meta_include_prototype: false
     - meta_scope: string.quoted.double.ldlp
-    - match: '\\.'
-      scope: constant.character.escape.ldlp
-    - match: '\\[^:]'
+    - match: '\\x[a-fA-F0-9]{2}|\\\\|\\"|\\e|\\f|\\n|{}|\\r|\\t|\\v'
       scope: constant.character.escape.ldlp
     - match: '"'
       scope: punctuation.definition.string.end.ldlp
