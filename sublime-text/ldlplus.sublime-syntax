@@ -22,14 +22,20 @@ contexts:
     - include: keywords
 
   non-arithmetic-operators:
-    # Logical operators can appear anywhere in uncommented code
-    - match: '(<|>|\=|~|&&|\|\|)'
-      scope: keyword.operator.logical.ldlp
     # Assignment operator can appear anywhere in uncommented code
-    - match: '(:=)'
+    - match: ':='
       scope: keyword.operator.assignment.ldlp
+    # Concatenation operators can appear anywhere in uncommented code
+    - match: '(&\+|&)'
+      scope: keyword.operator.logical.ldlp
+    # Logical operators can appear anywhere in uncommented code
+    - match: '(not|\~|and|&&|or|\|\|)'
+      scope: keyword.operator.logical.ldlp
+    # Relational operators can appear anywhere in uncommented code
+    - match: '(<\=|<|>\=|>|\=|<>|\sin\s|\sisA\s)'
+      scope: keyword.operator.logical.ldlp
     # Word operators can appear anywhere in uncommented code
-    - match: '(?i) (?<![\.])\b(not|\~|and|or|in|isa|giving|format|fmt|position|pos|length|le|odt|as|\\|numeric|actual|back|every|from|until|group|last|total|extractedas|eas|exist) '
+    - match: '(?i)\b(actual|as|back|eas|every|exist|extractedas|fmt|format|from|giving|group|last|length|le|numeric|odt|position|pos|total|until)\b'
       scope: keyword.operator.word.ldlp
 
   arithmetic-operators:
@@ -119,7 +125,7 @@ contexts:
   inside_string:
     - meta_include_prototype: false
     - meta_scope: string.quoted.double.ldlp
-    - match: '\\'
+    - match: '\\.'
       scope: constant.character.escape.ldlp
     - match: '\\[^:]'
       scope: constant.character.escape.ldlp
