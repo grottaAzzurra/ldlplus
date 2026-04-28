@@ -16,26 +16,26 @@ LDL+ is the evolution of LDL, introduced with Unisys's Agile Business Suite (AB 
 ### Sublime Text
 1. Clone the ldlplus/sublime-text repo to your local machine. Take note of where you cloned it to or the location you downloaded it to.
 2. Open Sublime Text.
-3. Navigate to Preferences -> Browse Packages
+3. Navigate to Preferences -> Browse Packages<br>
 ![Image Step 3](sublime-text/assets/step_3.png)
-4. This will open a new file explorer window. Use it to create a new folder called "ldlplus" in this directory. This will contain all the configurations for the LDL+ syntax.
+4. This will open a new file explorer window. Use it to create a new folder called "ldlplus" in this directory. This will contain all the configurations for the LDL+ syntax.<br>
 ![Image Step 4](sublime-text/assets/step_4.png)
-5. Copy "ldlplus.sublime-syntax" and "ldlplus.tmPreferences" into this new "Packages\ldlplus" folder.
+5. Copy "ldlplus.sublime-syntax" and "ldlplus.tmPreferences" into this new "Packages\ldlplus" folder.<br>
 ![Image Step 4](sublime-text/assets/step_5.png)
-6. Your Sublime Text editor should be enabled to use LDL+ syntax. You will be able to see it listed as "LDL+" in the slideout dropdown menu View -> Syntax, labeled alphabetically. You can start using the LDL+ syntax on documents by naming them with the .ldlp file extension or selecting the Syntax from the Syntax Menu.
+6. Your Sublime Text editor should be enabled to use LDL+ syntax. You will be able to see it listed as "LDL+" in the slideout dropdown menu View -> Syntax, labeled alphabetically. You can start using the LDL+ syntax on documents by naming them with the .ldlp file extension or selecting the Syntax from the Syntax Menu.<br>
 ![Image Step 4](sublime-text/assets/step_6.png)
 ### Notepad++
 1. Clone the ldlplus/notepad-plus-plus repo to your local machine. Take note of where you cloned it to or the location you downloaded it to.
 2. Open Notepad++.
-3. Navigate to the menu bar and click Language.
+3. Navigate to the menu bar and click Language.<br>
 ![Image Step 3](notepad-plus-plus/assets/step_3.png)
-4. Slide your mouse down to hover on "User Defined Language" which should open a separate menu of options. Click "Define your Language..." and a new window will pop up.
+4. Slide your mouse down to hover on "User Defined Language" which should open a separate menu of options. Click "Define your Language..." and a new window will pop up.<br>
 ![Image Step 4](notepad-plus-plus/assets/step_4.png)
-5. Click the "Import..." button. This will open a window that allows you to search for the repo you cloned in step 1.
+5. Click the "Import..." button. This will open a window that allows you to search for the repo you cloned in step 1.<br>
 ![Image Step 5](notepad-plus-plus/assets/step_5.png)
-6. Within that repo, select the ldlplus.xml file and click Open.
+6. Within that repo, select the ldlplus.xml file and click Open.<br>
 ![Image Step 6](notepad-plus-plus/assets/step_6.png)
-7. You should have a successful import. You will be able to see it listed as "LDL+" in the dropdown menu labeled "User language" in the top left. You can close out of the window and start using the LDL+ syntax on documents by naming them with the .ldlp file extension.
+7. You should have a successful import. You will be able to see it listed as "LDL+" in the dropdown menu labeled "User language" in the top left. You can close out of the window and start using the LDL+ syntax on documents by naming them with the .ldlp file extension.<br>
 ![Image Step 7](notepad-plus-plus/assets/step_7.png)
 8. If the import failed, return to step 3 and try the step sequence again.
 
